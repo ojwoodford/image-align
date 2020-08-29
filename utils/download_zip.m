@@ -22,7 +22,7 @@ end
 function download_zip_(tname, name, ext, url)
 base = cd();
 temp_cd(tname);
-options = weboptions('Timeout', 20, 'ContentType', 'raw');
+options = weboptions('Timeout', 60, 'ContentType', 'raw');
 websave(['temp.' ext], url, options);
 try
     unpack(ext, name);
