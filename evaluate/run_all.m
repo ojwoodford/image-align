@@ -18,8 +18,6 @@
 function run_all(base)
 % Make sure all the mex functions are compiled
 check_compiled('ojw_interp2');
-check_compiled('bilinear_sample_mex');
-check_compiled('lanczos_sample_mex');
 check_compiled('vl_sift');
 check_compiled('vl_ubcmatch');
 
