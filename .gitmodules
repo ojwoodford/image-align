@@ -1,0 +1,12 @@
+[submodule "submodules/batch_job"]
+	path = submodules/batch_job
+	url = https://github.com/ojwoodford/batch_job.git
+[submodule "submodules/ojwul"]
+	path = submodules/ojwul
+	url = https://github.com/ojwoodford/ojwul
+[submodule "submodules/sc"]
+	path = submodules/sc
+	url = https://github.com/ojwoodford/sc.git
+[submodule "submodules/export_fig"]
+	path = submodules/export_fig
+	url = https://github.com/ojwoodford/export_fig.git
