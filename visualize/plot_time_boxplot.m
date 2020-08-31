@@ -10,13 +10,14 @@
 
 function plot_time_boxplot(times, show_legend)
 % Plot the frame time bar chart
-set(gcf(), 'Position', [182 553 400 265]);
+set(gcf(), 'Position', [182 583 245 235]);
 clf();
 set(gcf(), 'Color', 'w');
 set(gca(), 'FontName', 'Times', 'FontSize', 10, 'LineWidth', 1);
 l = bplot(times([2 1 3 4],:)'*1e6, 'outliers', 'whisker', 5, 'linewidth', 1);
 ylim([min(times(:)) max(times(:))]*1e6);
-set(gca(), 'XTick', 1:4, 'XTickLabel', {'Sparse NCC', 'Dense NCC', '   Census\newlineTransform', 'Descriptor\newline   Fields'}, 'YScale', 'log', 'YGrid', 'on');
+xlim([0.5 4.5])
+set(gca(), 'XTick', 1:4, 'XTickLabel', {'Sparse\newline NCC', 'Dense\newline NCC', '   Census\newlineTransform', 'Descriptor\newline   Fields'}, 'YScale', 'log', 'YGrid', 'on');
 ylabel('Tracking time (us/pixel/frame)');
 box on
 if nargin > 1 && show_legend

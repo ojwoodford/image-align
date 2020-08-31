@@ -67,9 +67,9 @@ if exist('videos', 'dir')
         results = load(sprintf('videos/%s_esm.mat', sequences{a}));
         frame_times{a,2} = results.time(:,2:end) / polyarea(results.corners(1,:), results.corners(2,:));
     end
-    plot_time_boxplot(cat(2, frame_times{:,1}));
+    plot_time_boxplot(cat(2, frame_times{:,1}), true);
     export_fig('frame_times.pdf');
-    plot_time_boxplot(cat(2, frame_times{:,2}), true);
+    plot_time_boxplot(cat(2, frame_times{:,2}));
     export_fig('frame_times_esm.pdf');
 end
 end
