@@ -7,6 +7,15 @@ To run, call:
     startup();
     run_all(RESULTS_DIR);
 
+Requirements:
+
+ - A C++ compiler set up (`mex -setup C++`). The script automatically compiles necessary C++ code.
+ - An internet connection. The script automatically downloads the required data.
+ - Ghostscipt be installed. The script automatically generates PDFs of the graphs in the paper.
+
+A complete run through all experiments takes around 12 hours on a 48-core
+machine.
+
 ### Copyright notice
 
 Copyright Snap Inc. 2020
