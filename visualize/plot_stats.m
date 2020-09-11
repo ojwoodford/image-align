@@ -68,7 +68,8 @@ export(sprintf('%s_iteration_time.pdf', name));
 % Error recall curve
 x = sort(reshape(stats.err(5,:), [size(stats.err, 2) sz(2:end)]));
 x = [zeros(1, size(x, 2), size(x, 3)); x];
-y = linspace(0, 100, size(x, 1))';
+y = cumsum(sign(x), 1);
+y = y .* (100 ./ max(y));
 plot_two_categories(x, y, [0.1 10], [0 100], 'Max. corner error (pixels)', 'Recall (%)', [0 1], colors, labels, show_legend(5));
 set(gca(), 'XTick', [0.1 1 10], 'XTickLabel', {'0.1', '1', '10'});
 export(sprintf('%s_error_recall.pdf', name));

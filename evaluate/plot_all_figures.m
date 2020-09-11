@@ -56,6 +56,10 @@ if exist('quantitative.mat', 'file')
     stats = compute_stats(results, M, 'hard', 1, ndgrid_cols(1, 2, [2 4], 1, 6));
     labels = {'ESM', 'SMR'};
     plot_stats(stats, labels, parula(3), 'scandaroli_esm', [11 2 1], 'Optimizer', labels, [1 0 0 0 0 0]);
+    % Locally normalized NCC vs SSD
+    stats = [7 1 2 1 6; 1 2 2 1 6]';
+    stats = merge_stats(compute_stats(results, ~M, 'hard', 1, stats), compute_stats(results, M, 'hard', 1, stats));
+    plot_stats(stats, {'SSD', 'NCC', 'Same', 'Diff.'}, parula(3), 'ssd', [11 2 2], 'Source/Target');
 end
 
 if exist('videos', 'dir')
