@@ -12,7 +12,12 @@ function write_video(ims, fname)
 h = VideoWriter(fname, 'MPEG-4');
 open(h);
 for f = 1:ims.num_frames()
-    writeVideo(h, ims(f));
+    try
+        writeVideo(h, ims(f));
+    catch me
+        warning('Error on frame %d: %s', f, getReport(me));
+        break;
+    end
 end
 close(h);
 end
