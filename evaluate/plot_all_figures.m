@@ -59,7 +59,8 @@ if exist('quantitative.mat', 'file')
     % Locally normalized NCC vs SSD
     stats = [7 1 2 1 6; 1 2 2 1 6]';
     stats = merge_stats(compute_stats(results, ~M, 'hard', 1, stats), compute_stats(results, M, 'hard', 1, stats));
-    plot_stats(stats, {'SSD', 'NCC', 'Same', 'Diff.'}, parula(3), 'ssd', [11 2 2], 'Source/Target');
+    stats = merge_stats(stats, compute_stats(results, M, 'hard', 1, [7 1 1 1 6; 1 2 1 1 6]'));
+    plot_stats(stats, {'SSD', 'NCC', 'Same/ESM', 'Diff./ESM', 'Diff./INV'}, parula(3), 'ssd', [11 2 3], '');
 end
 
 if exist('videos', 'dir')

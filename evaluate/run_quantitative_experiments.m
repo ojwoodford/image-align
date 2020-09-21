@@ -24,7 +24,6 @@ experimentParams = [ndgrid_cols(1:N, 1:N, 1,   2,     4,   0, 6) ... % Scandarol
                     ndgrid_cols(1:N, 1:N, 1,   4:5,   2:3, 1, 10) ... % Occlusion experiments
                     ndgrid_cols(1:N, 1:N, 9:10,  3,   1:3, 0, 6) ... % Weighting experiments
                     ndgrid_cols(1:N, 1:N, 7,   1,     2,   0, 6) ... % SSD (ESM only)
-                    ndgrid_cols(1:N, 1:N, 7,   4,     2,   0, 10) ... % SSD (ESM only)
                     ndgrid_cols(1:N, 1:N, 1,   2,     2:3, 0, 6) ... % NCC no weighting
                     ndgrid_cols(1:N, 1:N, 1,   5,     2,   0, 10:-1:1) ... % Number of features experiment
                     ndgrid_cols(1:N, 1:N, 6:-1:1, 1,  1,   0, 6) ... % Other descriptor experiments (all compositions)
@@ -34,7 +33,8 @@ experimentParams = [ndgrid_cols(1:N, 1:N, 1,   2,     4,   0, 6) ... % Scandarol
                     ndgrid_cols(1:N, 1:N, 1:3, 1,     1,   0, 6) ... % Single cost experiments (InvComp)
                     ndgrid_cols(1:N, 1:N, 1:2, 2:3,   1,   0, 6) ... % Multi cost experiments (InvComp)
                     ndgrid_cols(1:N, 1:N, 1:2, 5,     1,   0, 10) ...  % Multi cost experiments (InvComp)
-                    ndgrid_cols(1:N, 1:N, 1,   2,     1,   0, 6)]; ... % NCC no weighting
+                    ndgrid_cols(1:N, 1:N, 1,   2,     1,   0, 6)  ... % NCC no weighting (InvComp)
+                    ndgrid_cols(1:N, 1:N, 7,   1,     1,   0, 6)]; ... % SSD (InvComp)
 experimentParams = unique(experimentParams', 'stable', 'rows')'; % Remove duplicates
 
 % Run the experiments
