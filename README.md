@@ -1,6 +1,6 @@
 This repository contains the MATLAB code required to reproduce the results in the paper: 
 
-## [Using Normalized Cross Correlation in Least Squares Optimizations](https://arxiv.org/abs/1810.04320)
+## [Least Squares Normalized Cross Correlation](https://arxiv.org/abs/1810.04320)
 
 To run, call:
 
