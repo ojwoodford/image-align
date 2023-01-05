@@ -11,7 +11,8 @@ Requirements:
 
  - A C++ compiler set up (`mex -setup C++`). The script automatically compiles necessary C++ code.
  - An internet connection. The script automatically downloads the required data.
- - Ghostscipt be installed. The script automatically generates PDFs of the graphs in the paper.
+ - Ghostscipt should be installed. The script automatically generates PDFs of the graphs in the paper.
+ - MATLAB should be callable from the system command line, without the full path (e.g. by calling matlab or matlab.exe). This allows tasks to be parallelized across all available cores.
 
 A complete run through all experiments takes around 12 hours on a 48-core
 machine.
