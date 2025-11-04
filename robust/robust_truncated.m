@@ -8,10 +8,11 @@
 % Inc. be liable for any damages arising from the sample code or your use
 % thereof.
 
-function [s, W] = robust_truncated(s, width)
+function [s, W, W2] = robust_truncated(s, width)
 tau_sq = width * width;
 W = ones(size(s));
 W(s > tau_sq) = 0;
 s = min(s, tau_sq);
+W2 = 0;
 end
 

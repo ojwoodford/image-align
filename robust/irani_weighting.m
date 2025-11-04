@@ -8,7 +8,7 @@
 % Inc. be liable for any damages arising from the sample code or your use
 % thereof.
 
-function [cost, W] = irani_weighting(cost, ~, J, H)
+function [cost, W, W2] = irani_weighting(cost, ~, J, H)
 if nargin < 3 || isempty(J)
     return;
 end
@@ -19,4 +19,5 @@ W = cost;
 for a = 1:numel(W)
     W(a) = max(det(H(:,:,a)), 0);
 end
+W2 = 0;
 end

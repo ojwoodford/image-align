@@ -205,11 +205,16 @@ classdef directAlign
             c = sum(err .* err, 1);
             
             W = 1;
+            W2 = 0;
             quit_early = nargout < 2;
             if ~isempty(options.robustifier)
                 % Robustify
                 if nargout > 1
-                    [c, W] = options.robustifier(c, err, J, H);
+                    if options.robust_2nd_deriv
+                        [c, W, W2] = options.robustifier(c, err, J, H);
+                    else
+                        [c, W] = options.robustifier(c, err, J, H);
+                    end
                 else
                     c = options.robustifier(c, err);
                 end
@@ -226,6 +231,7 @@ classdef directAlign
             if ~isempty(this.weights)
                 c = c .* this.weights;
                 W = W .* this.weights;
+                W2 = W2 .* this.weights;
             end
             
             if quit_early
@@ -234,29 +240,37 @@ classdef directAlign
             
             if options.composition >= 0 || options.condition_linear_system || (size(W, 1) > 1)
                 assert(options.composition ~= -0.5, 'Scandaroli hybrid approach not supported with this configuration')
-                % Weight
-                if ~isequal(W, 1)
-                    W = sqrt(W);
-                    r = r .* W;
-                    J = J .* shiftdim(W, -1);
-                end
-                
-                J = prepJ(J, options.extra_dims);
-                if options.condition_linear_system                    
-                     % Condition
-                    conditioning_ = col(1 ./ sqrt(1 + sum(J .* J, 1)));
-                    if issparse(J)
-                        J = J * sparse((1:numel(conditioning_))', (1:numel(conditioning_))', conditioning_);
-                    else
-                        J = J .* conditioning_';
-                    end
-                end
-                if issparse(J)
-                    % Solve
-                    gn_step = -(((J' * J) + sparse(1:size(J, 2), 1:size(J, 2), 1e-15)) \ (J' * col(r)));
+                if options.robust_2nd_deriv && any(W2)
+                    % Weight
+%                     g = r' .* J;
+%                     r = r .* W;
+%                     J = J .* shiftdim(W, -1);
+                    error('Work in progress');
                 else
-                    % Solve Jacobian system
-                    gn_step = -lsqminnorm(J, col(r), 1e-8);
+                    % Weight
+                    if ~isequal(W, 1)
+                        W = sqrt(W);
+                        r = r .* W;
+                        J = J .* shiftdim(W, -1);
+                    end
+                    
+                    J = prepJ(J, options.extra_dims);
+                    if options.condition_linear_system                    
+                         % Condition
+                        conditioning_ = col(1 ./ sqrt(1 + sum(J .* J, 1)));
+                        if issparse(J)
+                            J = J * sparse((1:numel(conditioning_))', (1:numel(conditioning_))', conditioning_);
+                        else
+                            J = J .* conditioning_';
+                        end
+                    end
+                    if issparse(J)
+                        % Solve
+                        gn_step = -(((J' * J) + sparse(1:size(J, 2), 1:size(J, 2), 1e-15)) \ (J' * col(r)));
+                    else
+                        % Solve Jacobian system
+                        gn_step = -lsqminnorm(J, col(r), 1e-8);
+                    end
                 end
                 if options.condition_linear_system
                     gn_step = conditioning_ .* gn_step;
