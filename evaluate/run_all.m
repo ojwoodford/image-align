@@ -108,7 +108,7 @@ function results = quantitative(base)
 % Compute the global data
 try
     data = load_sequence_data(base);
-catch
+catch me
     % No images here. Just exit.
     results = {};
     return;
