@@ -8,9 +8,14 @@
 % Inc. be liable for any damages arising from the sample code or your use
 % thereof.
 
-function [s, W] = robust_gm(s, width)
+function [s, W, W2] = robust_gm(s, width)
 tau_sq = width * width;
-a = tau_sq ./ (s + tau_sq);
+r = 1.0 ./ (s + tau_sq);
+a = tau_sq .* r;
 s = s .* a;
 W = a .* a;
+if nargout < 3
+    return;
+end
+W2 = W .* a .* r;
 end
