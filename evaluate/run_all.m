@@ -29,11 +29,11 @@ temp_cd(base);
 fprintf('Downloading missing datasets...\n'); t = tic();
 mkdir_('Data');
 cd('Data');
-download_dataset('graffiti2', 'zip', 'https://drive.google.com/uc?export=download&id=1w07UiATOPfU9GFut9p8ZgxyIg6GzgJ4B');
-download_dataset('rifle',     'zip', 'https://drive.google.com/uc?export=download&id=1y_owhnanHygmQSFBIJyAWU4J-J3g5IdV');
-download_dataset('book',      'tgz', 'https://drive.google.com/uc?export=download&id=0B9p0qMkQ6VAUVW8yU2hKWnZiN1k');
-download_dataset('bear',      'tgz', 'https://drive.google.com/uc?export=download&id=0B9p0qMkQ6VAUdkd2aW9uN183bEk');
-download_dataset('cat-plane', 'tgz', 'https://drive.google.com/uc?export=download&id=0B9p0qMkQ6VAURzJjTFFoRUVSblk');
+download_dataset('graffiti2', '1w07UiATOPfU9GFut9p8ZgxyIg6GzgJ4B');
+download_dataset('rifle',     '1y_owhnanHygmQSFBIJyAWU4J-J3g5IdV');
+download_dataset('book',      '1j0BTtRRYiglVGoLM1617NMwgyEKIG-Xp');
+download_dataset('bear',      '1o9d7dcQ5PEK3e_MddPbOgGqyjMstYz0m');
+download_dataset('cat-plane', '13oyRZHjblz3xZK8gCDAwRx26vMTvZN7G');
 cd('..');
 fprintf('    Done in %gs\n', toc(t));
 
@@ -53,9 +53,9 @@ end
 % Run the qualitative experiments on videos
 mkdir_('videos');
 fprintf('Running video experiments...\n');
-videos = {'book',      'book/000.pgm',           [114 586 680 116; 199 130 465 542]; ...
-          'bear',      'bear/0000.pgm',          [221 618 624 244; 174 153 436 444]; ...
-          'cat-plane', 'cat-plane/00000001.ppm', [198 457 458 207; 109 105 407 411]};
+videos = {'book',      'book/000.png',       [114 586 680 116; 199 130 465 542]; ...
+          'bear',      'bear/0000.png',      [221 618 624 244; 174 153 436 444]; ...
+          'cat-plane', 'cat-plane/0001.png', [198 457 458 207; 109 105 407 411]};
 maxNumCompThreads(num_cores());
 for a = 1:size(videos, 1)
     % Inverse compositional
@@ -97,10 +97,35 @@ if ~exist(name, 'dir')
 end
 end
 
-function download_dataset(name, varargin)
+function download_dataset(name, fid)
 if ~exist(name, 'dir')
     fprintf('    Downloading %s\n', name);
-    download_zip(name, varargin{:});
+    try
+        tname = tempname();
+        base = cd();
+        co = onCleanup(@() cleanup(base, tname));
+        mkdir(tname);
+        cd(tname);
+        fname = strcat(name, '.zip');
+        download_gdrive_file(fname, fid);
+        unzip(fname);
+        if exist(name, 'dir')
+            movefile(name, base);
+        else
+            delete(fname);
+            cd(base);
+            movefile(tname, name);
+        end
+    catch me
+        warning(getReport(me));
+    end
+end
+end
+
+function cleanup(base, tname)
+cd(base);
+if exist(tname, 'dir')
+    rmdir(tname, 's');
 end
 end
 
