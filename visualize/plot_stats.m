@@ -10,7 +10,7 @@
 
 function plot_stats(stats, labels, colors, name, sz, bar_x_label, bar_labels, show_legend, position)
 if nargin < 9
-    position = [100 118 304 265];
+    position = [100 100 403 364];
     if nargin < 8
         show_legend = [1 0 0 1 0];
         if nargin < 7
@@ -24,7 +24,7 @@ plots = {'converged', 'iterations', 'time_to_converge'; ...
          [0 100], [], []; ...
          100, 1, 1};
 export = @(varargin) export_fig(varargin{:});
-set(gcf(), 'Position', position);
+set(gcf(), 'Position', position, 'Color', 'w');
 x_label = 'Mean initial corner error';
 a = 1;
 for p = plots
@@ -35,12 +35,11 @@ end
 
 % Iteration time bar chart
 clf();
-set(gcf(), 'Color', 'w');
-set(gca(), 'FontName', 'Times', 'FontSize', 10, 'LineWidth', 1, 'Color', 'none', 'XColor', 'k', 'YColor', 'k');
+set(gca(), 'FontName', 'Times', 'FontSize', 10, 'LineWidth', 1, 'Color', 'w', 'XColor', 'k', 'YColor', 'k');
 hold on;
 data = shiftdim(mean(reshape(stats.time_per_iteration, sz), 1), 1)' * 1000;
 if size(data, 1) > 1
-    h = bar(data);
+    h = bar(data, 'EdgeColor', 'k');
     for a = 1:sz(2)
         h(a).FaceColor = colors(a,:);
     end
@@ -48,7 +47,7 @@ if size(data, 1) > 1
     xlim([0.5 sz(3)+0.5]);
 else
     for a = 1:sz(2)
-        h = bar(a, data(a));
+        h = bar(a, data(a), 'EdgeColor', 'k');
         h.FaceColor = colors(a,:);
     end
     set(gca(), 'XTick', 1:min(numel(bar_labels), sz(2)), 'XTickLabel', bar_labels(1:min(sz(2), end)));
@@ -78,8 +77,7 @@ end
 
 function plot_two_categories(x, y, x_lim, y_lim, x_label, y_label, scales, colors, labels, show_legend)
 clf();
-set(gcf(), 'Color', 'w');
-set(gca(), 'FontName', 'Times', 'FontSize', 10, 'LineWidth', 1, 'Color', 'none', 'XColor', 'k', 'YColor', 'k');
+set(gca(), 'FontName', 'Times', 'FontSize', 10, 'LineWidth', 1, 'Color', 'w', 'XColor', 'k', 'YColor', 'k');
 hold on;
 % Lines for legend
 sz = [max([size(y) ones(1, 3-ndims(y))], [size(x) ones(1, 3-ndims(x))]) 1];

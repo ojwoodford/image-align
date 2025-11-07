@@ -24,7 +24,9 @@ end
 M = eye(4) == 0;
 % Huber kernel
 stats = compute_stats(results, M, 'hard', 1, ndgrid_cols(1:2, 1, 1:3, 1, 1, 1));
-plot_stats(stats, {'IRLS', '2nd order', 'FWD', 'INV', 'ESM'}, parula(3), 'huber', [11 2 3], 'Help');
+plot_stats(stats, {'IRLS', '2nd order', 'INV', 'ESM', 'FWD'}, parula(3), 'huber', [11 2 3], 'Help');
+stats = compute_stats(results, M, 'hard', 1, ndgrid_cols(1:2, 2, 1:3, 1, 1, 1));
+plot_stats(stats, {'IRLS', '2nd order', 'INV', 'ESM', 'FWD'}, parula(3), 'gm', [11 2 3], 'Help');
 end
 
 function results = robustifier_experiments(base)
