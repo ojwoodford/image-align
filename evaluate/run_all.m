@@ -22,12 +22,12 @@ check_compiled('vl_sift');
 check_compiled('vl_ubcmatch');
 
 % Make and go to the directory
-mkdir_(base)
+qmkdir(base)
 temp_cd(base);
 
 % Download the data
 fprintf('Downloading missing datasets...\n'); t = tic();
-mkdir_('Data');
+qmkdir('Data');
 cd('Data');
 download_dataset('graffiti2', '1w07UiATOPfU9GFut9p8ZgxyIg6GzgJ4B');
 download_dataset('rifle',     '1y_owhnanHygmQSFBIJyAWU4J-J3g5IdV');
@@ -38,7 +38,7 @@ cd('..');
 fprintf('    Done in %gs\n', toc(t));
 
 % Run the quantitative experiments on regions
-mkdir_('Results')
+qmkdir('Results')
 cd('Results')
 if ~exist('quantitative.mat', 'file')
     fprintf('Running quantitative experiments...\n'); t = tic();
@@ -51,7 +51,7 @@ if ~exist('quantitative.mat', 'file')
 end
 
 % Run the qualitative experiments on videos
-mkdir_('videos');
+qmkdir('videos');
 fprintf('Running video experiments...\n');
 videos = {'book',      'book/000.png',       [114 586 680 116; 199 130 465 542]; ...
           'bear',      'bear/0000.png',      [221 618 624 244; 174 153 436 444]; ...
@@ -82,18 +82,12 @@ if ~exist(mat_name, 'file')
     results = run_sequence(ims, corners, varargin{:});
     save(mat_name, '-struct', 'results');
     dir_name = mat_name(1:end-4);
-    mkdir_(dir_name);
+    qmkdir(dir_name);
     temp_cd(dir_name);
     render_sequence(ims, results);
     write_video(imstream('output.0001.png'), sprintf('../%s.mp4', name));
     cd('../..');
     fprintf('    Done in %gs\n', toc(t));
-end
-end
-
-function mkdir_(name)
-if ~exist(name, 'dir')
-    mkdir(name);
 end
 end
 
@@ -141,7 +135,7 @@ end
 
 % Create the result directory for this sequence
 [~, name] = fileparts(base);
-mkdir_(name);
+qmkdir(name);
 temp_cd(name);
 
 if ~exist('results.mat', 'file')

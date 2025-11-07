@@ -4,7 +4,7 @@
 
 function run_robustifier_experiments(base)
 resdir = fullfile(base, 'RobustResults');
-status = mkdir(resdir);
+qmkdir(resdir);
 temp_cd(resdir);
 if ~exist('quantitative.mat', 'file')
     fprintf('Running robustifier experiments...\n'); t = tic();
@@ -25,7 +25,7 @@ if isempty(dirim(base))
 end
 [~, name] = fileparts(base);
 base = cd(cd(base)); % Get the full path to base
-status = mkdir(name);
+qmkdir(name);
 temp_cd(name);
 
 if ~exist('results.mat', 'file')
