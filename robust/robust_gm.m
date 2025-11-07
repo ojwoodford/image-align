@@ -17,5 +17,5 @@ W = a .* a;
 if nargout < 3
     return;
 end
-W2 = W .* a .* r;
+W2 = -2 * (W .* r);
 end
