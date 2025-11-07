@@ -40,15 +40,7 @@ fprintf('    Done in %gs\n', toc(t));
 % Run the quantitative experiments on regions
 qmkdir('Results')
 cd('Results')
-if ~exist('quantitative.mat', 'file')
-    fprintf('Running quantitative experiments...\n'); t = tic();
-    results = recurse_subdirs(@quantitative, '../Data/graffiti2');
-    fprintf('    Done in %gs\n', toc(t));
-    
-    % Combine and store the results
-    results = stack_results(results{~cellfun(@isempty, results)});
-    save quantitative.mat results
-end
+run_quantitative_experiments();
 
 % Run the qualitative experiments on videos
 qmkdir('videos');
@@ -120,35 +112,6 @@ function cleanup(base, tname)
 cd(base);
 if exist(tname, 'dir')
     rmdir(tname, 's');
-end
-end
-
-function results = quantitative(base)
-% Compute the global data
-try
-    data = load_sequence_data(base);
-catch me
-    % No images here. Just exit.
-    results = {};
-    return;
-end
-
-% Create the result directory for this sequence
-[~, name] = fileparts(base);
-qmkdir(name);
-temp_cd(name);
-
-if ~exist('results.mat', 'file')
-    fprintf(' Computing results for sequence %s...', name); t = tic();
-    % Run the experiments
-    run_quantitative_experiments(data);
-    
-    % Collate the results
-    results = get_quantitative_results(data);
-    save results.mat results
-    fprintf(' Done in %gs.\n', toc(t));
-else
-    results = load_field('results.mat', 'results');
 end
 end
 
