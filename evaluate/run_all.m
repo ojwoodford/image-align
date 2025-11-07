@@ -158,14 +158,6 @@ else
 end
 end
 
-function results = stack_results(varargin)
-results = varargin{1};
-I = find(~cellfun(@isempty, results));
-for a = 2:nargin
-    results(I) = cellfun(@(c, d) cat(6, c, d), results(I), varargin{a}(I), 'UniformOutput', false);
-end
-end
-
 function check_compiled(name)
 str = which(name);
 if isempty(str)
