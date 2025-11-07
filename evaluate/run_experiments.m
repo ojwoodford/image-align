@@ -15,8 +15,8 @@ base = cd(cd(base)); % Get the full path to base
 qmkdir(name);
 temp_cd(name);
 
-experimentParams = vcat(repmat(ndgrid_cols(1:N, 1:N), 1, size(experimentParams, 2)), ...
-                reshape(repmat(experimentParams, N*N, 1), size(experimentParams, 1), []));
+experimentParams = vertcat(repmat(ndgrid_cols(1:N, 1:N), 1, size(experimentParams, 2)), ...
+                   reshape(repmat(experimentParams, N*N, 1), size(experimentParams, 1), []));
 experimentParams = experimentParams(:,cellfun(@(v) ~done(v), num2cell(experimentParams, 1)));
 
 if ~isempty(experimentParams)
