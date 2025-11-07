@@ -1,4 +1,4 @@
-%NCC_EXPERIMENT
+%ROBUSTIFIER_EXPERIMENT
 
 % Copyright Oliver Woodford 2025
 
