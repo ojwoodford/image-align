@@ -34,7 +34,7 @@ if ~exist('results.mat', 'file')
     data = load_sequence_data(base);
     N = numel(data.ims);
     data.experiment_func = 'robustifier_experiment';
-    run_experiments(ndgrid_cols(1:N, 1:N, 1:2, 1:2, [1 3 2], 1:2, 6, 1), data);
+    run_experiments(ndgrid_cols(1:N, 1:N, 1:2, [2 1], [2 3 1], 1:2, 6, 1), data);
     
     % Collate the results
     results = get_quantitative_results(data);
