@@ -36,7 +36,7 @@ end
 % Iteration time bar chart
 clf();
 set(gcf(), 'Color', 'w');
-set(gca(), 'FontName', 'Times', 'FontSize', 10, 'LineWidth', 1);
+set(gca(), 'FontName', 'Times', 'FontSize', 10, 'LineWidth', 1, 'Color', 'none', 'XColor', 'k', 'YColor', 'k');
 hold on;
 data = shiftdim(mean(reshape(stats.time_per_iteration, sz), 1), 1)' * 1000;
 if size(data, 1) > 1
@@ -55,7 +55,8 @@ else
     xlim([0.5 sz(2)+0.5]);
 end
 if show_legend(4)
-    legend(labels{1:sz(2)}, 'Location', 'NorthWest');
+    h = legend(labels{1:sz(2)});
+    set(h, 'Color', 'w', 'EdgeColor', 'k', 'TextColor', 'k', 'Location', 'NorthWest');
 end
 if ~isempty(bar_x_label)
     xlabel(bar_x_label);
@@ -78,7 +79,7 @@ end
 function plot_two_categories(x, y, x_lim, y_lim, x_label, y_label, scales, colors, labels, show_legend)
 clf();
 set(gcf(), 'Color', 'w');
-set(gca(), 'FontName', 'Times', 'FontSize', 10, 'LineWidth', 1);
+set(gca(), 'FontName', 'Times', 'FontSize', 10, 'LineWidth', 1, 'Color', 'none', 'XColor', 'k', 'YColor', 'k');
 hold on;
 % Lines for legend
 sz = [max([size(y) ones(1, 3-ndims(y))], [size(x) ones(1, 3-ndims(x))]) 1];
@@ -127,7 +128,6 @@ if show_legend
     if size(y, 3) > 1
         h.NumColumns = 2;
     end
-    set(h.BoxFace, 'ColorData', uint8([255 255 255 200])', 'ColorType', 'truecoloralpha')
-    h.Location = 'NorthEast';
+    set(h, 'Color', 'w', 'EdgeColor', 'k', 'TextColor', 'k', 'Location', 'NorthEast');
 end
 end
