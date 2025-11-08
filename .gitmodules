@@ -10,3 +10,6 @@
 [submodule "submodules/export_fig"]
 	path = submodules/export_fig
 	url = https://github.com/ojwoodford/export_fig.git
+[submodule "submodules/CPUInfo"]
+	path = submodules/CPUInfo
+	url = https://github.com/BJTor/CPUInfo.git
