@@ -10,7 +10,7 @@
 
 function plot_stats(stats, labels, colors, name, sz, bar_x_label, bar_labels, show_legend, position)
 if nargin < 9
-    position = [100 100 403 364];
+    position = [100 100 405 353];
     if nargin < 8
         show_legend = [1 0 0 1 0];
         if nargin < 7
