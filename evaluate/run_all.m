@@ -49,11 +49,12 @@ videos = {'book',      'book/000.png',       [114 586 680 116; 199 130 465 542];
           'bear',      'bear/0000.png',      [221 618 624 244; 174 153 436 444]; ...
           'cat-plane', 'cat-plane/0001.png', [198 457 458 207; 109 105 407 411]};
 maxNumCompThreads(num_cores());
+store_frames = false; % Set to true to get uncompressed video frames for publication
 for a = 1:size(videos, 1)
     % Inverse compositional
-    generate_video(videos{a,:}, -1, []);
+    generate_video(videos{a,:}, store_frames, -1, []);
     % ESM
-    generate_video([videos{a,1} '_esm'], videos{a,2:end}, 0, @(r, varargin) robust_gm(r, 0.5));
+    generate_video([videos{a,1} '_esm'], videos{a,2:end}, store_frames, 0, @(r, varargin) robust_gm(r, 0.5));
 end
 fprintf('Done.\n');
 
@@ -61,7 +62,7 @@ fprintf('Done.\n');
 plot_all_figures();
 end
 
-function generate_video(name, first_frame, corners, varargin)
+function generate_video(name, first_frame, corners, store_frames, varargin)
 mat_name = sprintf('videos/%s.mat', name);
 if ~exist(mat_name, 'file')
     first_frame = sprintf('../Data/%s', first_frame);
@@ -73,7 +74,16 @@ if ~exist(mat_name, 'file')
     ims = imstream(first_frame);
     results = run_sequence(ims, corners, varargin{:});
     save(mat_name, '-struct', 'results');
-    render_video(ims, results, sprintf('videos/%s.mp4', name));
+    if store_frames
+        dir_name = mat_name(1:end-4);
+        qmkdir(dir_name);
+        temp_cd(dir_name);
+        render_sequence(ims, results);
+        write_video(imstream('output.0001.png'), sprintf('../%s.mp4', name));
+        cd('../..');
+    else
+        render_video(ims, results, sprintf('videos/%s.mp4', name));
+    end
     fprintf('    Done in %gs\n', toc(t));
 end
 end
