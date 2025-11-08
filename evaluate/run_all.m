@@ -73,12 +73,7 @@ if ~exist(mat_name, 'file')
     ims = imstream(first_frame);
     results = run_sequence(ims, corners, varargin{:});
     save(mat_name, '-struct', 'results');
-    dir_name = mat_name(1:end-4);
-    qmkdir(dir_name);
-    temp_cd(dir_name);
-    render_sequence(ims, results);
-    write_video(imstream('output.0001.png'), sprintf('../%s.mp4', name));
-    cd('../..');
+    render_video(ims, results, sprintf('videos/%s.mp4', name));
     fprintf('    Done in %gs\n', toc(t));
 end
 end
