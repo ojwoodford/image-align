@@ -22,6 +22,7 @@ check_compiled('vl_sift');
 check_compiled('vl_ubcmatch');
 
 % Make and go to the directory
+ttotal = tic();
 qmkdir(base);
 temp_cd(base);
 
@@ -59,6 +60,8 @@ fprintf('Done.\n');
 
 % Plot the graphs
 plot_all_figures();
+mycpu = cpuinfo();
+fprintf('A complete run through all experiments in MATLAB %s on a %s CPU with %d cores took %s.\n', version('-release'), mycpu.CPUName, mycpu.TotalCores, timestr(toc(ttotal)));
 end
 
 function generate_video(name, first_frame, corners, varargin)
@@ -129,5 +132,19 @@ if isequal(str(end-1:end), '.m')
     if isequal(str(end-1:end), '.m')
         error('Failed to compile %s. Have you configured C & C++ compilers?', name);
     end
+end
+end
+
+function str = timestr(t)
+s = rem(t, 60);
+m = rem(floor(t/60), 60);
+h = floor(t/3600);
+
+if h > 0
+    str= sprintf('%dh%02dm%02.0fs', h, m, s);
+elseif m > 0
+    str = sprintf('%dm%02.0fs', m, s);
+else
+    str = sprintf('%2.1fs', s);
 end
 end
