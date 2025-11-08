@@ -27,7 +27,6 @@ if ~isempty(experimentParams)
     data = load_sequence_data(base);
     data.experiment_func = funcname;
     num_workers = min(num_cores(), size(experimentParams, 2));
-    data.num_threads = ceil(num_cores() / num_workers);
     batch_job_distrib(@experiment_wrapper, experimentParams,  {'', num_workers}, data, '-progress', '-chunk_lims', [1 1]);
 end
 

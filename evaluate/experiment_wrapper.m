@@ -16,6 +16,7 @@ fname = [fname(2:end) '.mat'];
 if exist(fname, 'file')
     return;
 end
+maxNumCompThreads(1);
 try
     % Run the experiment
     experiment_func = str2func(data.experiment_func);

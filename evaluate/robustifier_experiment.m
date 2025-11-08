@@ -12,23 +12,31 @@ function out = robustifier_experiment(params, data)
 % 6 - features (1: dense, 2: sparse)
 % 7 - value (grid block length, or number of features (x0.1))
 % 8 - condition linear system (1: no, 2: yes)
+% 9 - normalizer (1: ncc, 2: ssd)
 
-maxNumCompThreads(data.num_threads);
 mean_distances = 0:10;
 
 % Set the options
 options.warp_type = 'homog';
-options.normalize = 'ncc';
+normalizer = {'ncc', 'ssd'};
+options.normalize = normalizer{params(9)};
 options.intensity_model = 'none';
 options.optimizer_params = [100 1e-4 1e-6 3];
 options.composition = params(5) - 2;
 options.robust_2nd_deriv = params(3) == 2;
 options.condition_linear_system = params(8) == 2;
+if params(9) == 1
+    kernel_threshold = 0.5; % NCC threshold
+elseif params(6) == 2
+    kernel_threshold = 16; % SSD threshold with 16 pixel block
+else
+    kernel_threshold = params(7) ^ 2; % SSD threshold with NxN pixel block
+end
 switch params(4)
     case 1
-        options.robustifier = @(r, varargin) robust_huber(r, 0.5);
+        options.robustifier = @(r, varargin) robust_huber(r, kernel_threshold);
     case 2
-        options.robustifier = @(r, varargin) robust_gm(r, 0.5);
+        options.robustifier = @(r, varargin) robust_gm(r, kernel_threshold);
     otherwise
         error('Robustifier not recognized');
 end
