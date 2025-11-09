@@ -16,6 +16,7 @@
 % thereof.
 
 function run_all(base)
+ojw_progressbar -text
 % Make sure all the mex functions are compiled
 check_compiled('ojw_interp2');
 check_compiled('vl_sift');
