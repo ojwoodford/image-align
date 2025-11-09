@@ -21,6 +21,7 @@ set(gca(), 'XTick', 1:4, 'XTickLabel', {'Sparse\newline NCC', 'Dense\newline NCC
 ylabel('Tracking time (us/pixel/frame)');
 box on
 if nargin > 1 && show_legend
-    legend(l{:}, 'Location', 'NorthWest');
+    h = legend(l{:}, 'Location', 'NorthWest');
+    set(h, 'Color', 'w', 'EdgeColor', 'k', 'TextColor', 'k');
 end
 end
