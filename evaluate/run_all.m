@@ -50,11 +50,12 @@ videos = {'book',      'book/000.png',       [114 586 680 116; 199 130 465 542];
           'bear',      'bear/0000.png',      [221 618 624 244; 174 153 436 444]; ...
           'cat-plane', 'cat-plane/0001.png', [198 457 458 207; 109 105 407 411]};
 maxNumCompThreads(num_cores());
+store_frames = false; % Set to true to get umcompressed frames for publication
 for a = 1:size(videos, 1)
     % Inverse compositional
-    generate_video(videos{a,:}, -1, []);
+    generate_video(videos{a,:}, store_frames, -1, []);
     % ESM
-    generate_video([videos{a,1} '_esm'], videos{a,2:end}, 0, @(r, varargin) robust_gm(r, 0.5));
+    generate_video([videos{a,1} '_esm'], videos{a,2:end}, store_frames, 0, @(r, varargin) robust_gm(r, 0.5));
 end
 fprintf('Done.\n');
 
@@ -64,26 +65,32 @@ mycpu = cpuinfo();
 fprintf('A complete run through all experiments in MATLAB %s on a %s CPU with %d cores took %s.\n', version('-release'), mycpu.CPUName, mycpu.TotalCores, timestr(toc(ttotal)));
 end
 
-function generate_video(name, first_frame, corners, varargin)
+function generate_video(name, first_frame, corners, store_frames, varargin)
+first_frame = sprintf('../Data/%s', first_frame);
+if ~exist(first_frame, 'file')
+    warning('%s sequence not found. Skipping evaluation/rendering.', name);
+    return;
+end
+fprintf('   %s...\n', name); t = tic();
+ims = imstream(first_frame);
 mat_name = sprintf('videos/%s.mat', name);
 if ~exist(mat_name, 'file')
-    first_frame = sprintf('../Data/%s', first_frame);
-    if ~exist(first_frame, 'file')
-        warning('%s sequence not found. Skipping evaluation.', name);
-        return;
-    end
-    fprintf('   %s...\n', name); t = tic();
-    ims = imstream(first_frame);
     results = run_sequence(ims, corners, varargin{:});
     save(mat_name, '-struct', 'results');
+else
+    results = load(mat_name);
+end
+if store_frames
     dir_name = mat_name(1:end-4);
     qmkdir(dir_name);
     temp_cd(dir_name);
     render_sequence(ims, results);
     write_video(imstream('output.0001.png'), sprintf('../%s.mp4', name));
     cd('../..');
-    fprintf('    Done in %gs\n', toc(t));
+else
+    render_video(ims, results, sprintf('videos/%s.mp4', name));
 end
+fprintf('    Done in %gs\n', toc(t));
 end
 
 function download_dataset(name, fid)

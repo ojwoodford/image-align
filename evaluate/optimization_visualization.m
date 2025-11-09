@@ -104,7 +104,7 @@ for a = size(start_points, 2):-1:1
 end
 plot(start_points(1,:)', start_points(2,:)', 'k.', 'MarkerSize', 4);
 
-set(gca(), 'FontName', 'Times', 'FontSize', 5, 'YDir', 'normal');
+set(gca(), 'FontName', 'Times', 'FontSize', 5, 'YDir', 'normal', 'XColor', 'k', 'YColor', 'k');
 axis equal;
 xlim(dense_offsets{1}([1 end]));
 ylim(dense_offsets{2}([1 end]));
@@ -112,6 +112,7 @@ names = {'NCC', 'ZNSSD', 'SMR', 'ECCM'};
 [h, icons] = legend(names{1:3+(method==1)}, 'Location', 'SouthEast');
 h.Color = 'none';
 h.Box = 'off';
+h.TextColor = 'k';
 for a = 4+(method==1):2:numel(icons)
     icons(a).XData(1) = 0.4;
 end

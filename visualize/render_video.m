@@ -11,8 +11,7 @@
 function render_video(ims, result, fname)
 vh = VideoWriter(fname, 'MPEG-4');
 open(vh);
-figure(1);
-h = gcf();
+h = figure(1);
 sz = normd(diff(result.corners(:,[1:4 1]), 1, 2), 1);
 sz = (sz([2 1]) + sz([4 3])) / 2;
 extract_normalized_region(convert2gray(ims(1)), result.corners(:,[1 2 4 3]), sz);
@@ -44,6 +43,7 @@ for b = 1:N
         end
     catch
         % Reset the figure
+        figure(h);
         clf(h, 'reset');
         set(h, 'Position', [95 662 1554 583]);
         h.Color = 'w';
@@ -57,15 +57,15 @@ for b = 1:N
         ax = axes('Position', [0.06 0.84 0.43 0.1]);
         hold on
         for a = 4:-1:1
-            handles.bar(a) = barh(a, time(a), colors{a});
+            handles.bar(a) = barh(a, time(a), colors{a}, 'EdgeColor', 'k');
         end
         xlabel 'Time per frame (s)'
-        set(ax, 'YTick', 1:4, 'YTickLabel', labels, 'XLim', [0 max_time], 'YLim', [0.5 4.5], 'XAxisLocation', 'top', 'TickLength', [0 0], 'XGrid', 'on', 'Color', 'none');
+        set(ax, 'YTick', 1:4, 'YTickLabel', labels, 'XLim', [0 max_time], 'YLim', [0.5 4.5], 'XAxisLocation', 'top', 'TickLength', [0 0], 'XGrid', 'on', 'Color', 'none', 'XColor', 'k', 'YColor', 'k');
         for a = 4:-1:1
             ax = subplot('Position', [0.502+0.25*floor((a-1)/2) 0.002+0.50*mod(a, 2) 0.2485 0.4985]);
             handles.sub_im(a) = imdisp(im{a}, [0 255]);
             set(ax, 'Visible', 'on', 'XTick', [], 'YTick', [], 'Box', 'on', 'XColor', colors{a}, 'YColor', colors{a}, 'LineWidth', 3);
-            text(5, 5, labels{a}, 'Interpreter', 'none', 'BackgroundColor', 'w', 'VerticalAlignment', 'bottom', 'Units', 'points');
+            text(5, 5, labels{a}, 'Interpreter', 'none', 'BackgroundColor', 'w', 'VerticalAlignment', 'bottom', 'Units', 'points', 'Color', 'k');
         end
     end
     drawnow();
