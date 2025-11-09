@@ -69,8 +69,9 @@ for b = 1:N
         end
     end
     drawnow();
+    framedata = getframe(h);
     try
-        writeVideo(vh, export_fig(h, '-a1'));
+        writeVideo(vh, framedata);
     catch me
         warning('Error on frame %d: %s', f, getReport(me));
         break;
