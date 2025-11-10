@@ -20,7 +20,6 @@ function out = ncc_experiment(params, data)
 % 6 - occlude
 % 7 - value (grid block length, or number of features (x0.1))
 
-maxNumCompThreads(data.num_threads);
 mean_distances = 0:10;
 
 % Set the options

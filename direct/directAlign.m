@@ -205,11 +205,16 @@ classdef directAlign
             c = sum(err .* err, 1);
             
             W = 1;
+            W2 = 0;
             quit_early = nargout < 2;
             if ~isempty(options.robustifier)
                 % Robustify
                 if nargout > 1
-                    [c, W] = options.robustifier(c, err, J, H);
+                    if options.robust_2nd_deriv
+                        [c, W, W2] = options.robustifier(c, err, J, H);
+                    else
+                        [c, W] = options.robustifier(c, err, J, H);
+                    end
                 else
                     c = options.robustifier(c, err);
                 end
@@ -226,6 +231,7 @@ classdef directAlign
             if ~isempty(this.weights)
                 c = c .* this.weights;
                 W = W .* this.weights;
+                W2 = W2 .* this.weights;
             end
             
             if quit_early
@@ -235,6 +241,12 @@ classdef directAlign
             if options.composition >= 0 || options.condition_linear_system || (size(W, 1) > 1)
                 assert(options.composition ~= -0.5, 'Scandaroli hybrid approach not supported with this configuration')
                 % Weight
+                second_order = options.robust_2nd_deriv && any(W2);
+                if second_order
+                    g = tmult(J, reshape(r, size(r, 1), 1, size(r, 2)));
+                    g = g(:,:);
+                    gw = W2' .* g';
+                end
                 if ~isequal(W, 1)
                     W = sqrt(W);
                     r = r .* W;
@@ -250,10 +262,19 @@ classdef directAlign
                     else
                         J = J .* conditioning_';
                     end
+                    if second_order
+                        g = conditioning_ .* g;
+                        gw = gw .* conditioning_';
+                    end
                 end
+
                 if issparse(J)
+                    assert(~second_order, 'Sparse systems not supported with 2nd derivative of robustifiers')
                     % Solve
                     gn_step = -(((J' * J) + sparse(1:size(J, 2), 1:size(J, 2), 1e-15)) \ (J' * col(r)));
+                elseif second_order
+                    % Solve normal equations (i.e. Hessian system)
+                    gn_step = -lsqminnorm(J' * J + 2 * (g * gw), J' * col(r), 1e-8);
                 else
                     % Solve Jacobian system
                     gn_step = -lsqminnorm(J, col(r), 1e-8);
@@ -264,18 +285,27 @@ classdef directAlign
             else
                 % Solve Hessian system (normal equations)
                 % Compute the gradient
-                r = tmult(J, reshape(r, size(r, 1), 1, size(r, 2)));
+                g = tmult(J, reshape(r, size(r, 1), 1, size(r, 2)));
                 
                 % Weight
                 if ~isequal(W, 1)
                     W = col(W, 3);
-                    r = r .* W;
+                    r = g .* W;
                     H = H .* W;
+                else
+                    r = g;
                 end
                 
-                % Aggregate residuals & compute the step
+                % Aggregate residuals
                 r = sum(r, 3);
                 H = sum(H, 3);
+
+                % Second order robustifier correction
+                if options.robust_2nd_deriv && any(W2)
+                    H = H + 2 * ((g(:,:) .* W2) * g(:,:)');
+                end
+
+                % Compute the step
                 gn_step = -lsqminnorm(H, r, 1e-8);
             end
         end

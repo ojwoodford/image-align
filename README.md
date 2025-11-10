@@ -14,8 +14,7 @@ Requirements:
  - Ghostscipt should be installed. The script automatically generates PDFs of the graphs in the paper.
  - MATLAB should be callable from the system command line, without the full path (e.g. by calling matlab or matlab.exe). This allows tasks to be parallelized across all available cores.
 
-A complete run through all experiments takes around 12 hours on a 48-core
-machine.
+Latest runtime: A complete run through all experiments in MATLAB 2025b on a Apple M1 Pro CPU with 10 cores took 10 hours 45 minutes.
 
 ### Copyright notice
 

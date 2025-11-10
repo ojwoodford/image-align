@@ -8,14 +8,19 @@
 % Inc. be liable for any damages arising from the sample code or your use
 % thereof.
 
-function [s, W] = robust_huber(s, width)
+function [s, W, W2] = robust_huber(s, width)
 tau_sq = width * width;
 outliers = s > tau_sq;
-sqrt_s = sqrt(s(outliers));
+s_outliers = s(outliers);
+sqrt_s = sqrt(s_outliers);
 s(outliers) = 2.0 * width * sqrt_s - tau_sq;
 sqrt_s = width ./ sqrt_s;
-W = s;
+W = ones(size(s), class(s));
 W(outliers) = sqrt_s;
-W(~outliers) = 1;
+if nargout < 3
+    return;
+end
+W2 = zeros(size(s), class(s));
+W2(outliers) = -0.5 * sqrt_s ./ s_outliers;
 end
 

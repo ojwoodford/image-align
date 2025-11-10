@@ -1,4 +1,4 @@
-%RENDER_SEQUENCE
+%RENDER_VIDEO
 
 % Copyright Snap Inc. 2020
 % This sample code is made available by Snap Inc. for informational
@@ -8,9 +8,10 @@
 % Inc. be liable for any damages arising from the sample code or your use
 % thereof.
 
-function render_sequence(ims, result)
-figure(1);
-h = gcf();
+function render_video(ims, result, fname)
+vh = VideoWriter(fname, 'MPEG-4');
+open(vh);
+h = figure(1);
 sz = normd(diff(result.corners(:,[1:4 1]), 1, 2), 1);
 sz = (sz([2 1]) + sz([4 3])) / 2;
 extract_normalized_region(convert2gray(ims(1)), result.corners(:,[1 2 4 3]), sz);
@@ -42,6 +43,7 @@ for b = 1:N
         end
     catch
         % Reset the figure
+        figure(h);
         clf(h, 'reset');
         set(h, 'Position', [95 662 1554 583]);
         h.Color = 'w';
@@ -67,9 +69,16 @@ for b = 1:N
         end
     end
     drawnow();
-    export_fig(h, sprintf('output.%4.4d.png', b), '-a1');
+    framedata = getframe(h);
+    try
+        writeVideo(vh, framedata);
+    catch me
+        warning('Error on frame %d: %s', f, getReport(me));
+        break;
+    end
     update(pb, b);
 end
+close(vh);
 end
 
 function im = extract_normalized_region(im, warp, sz)

@@ -1,4 +1,4 @@
-%IRANI_WEIGHTING
+%STACK_RESULTS
 
 % Copyright Snap Inc. 2020
 % This sample code is made available by Snap Inc. for informational
@@ -8,16 +8,10 @@
 % Inc. be liable for any damages arising from the sample code or your use
 % thereof.
 
-function [cost, W, W2] = irani_weighting(cost, ~, J, H)
-if nargin < 3 || isempty(J)
-    return;
+function results = stack_results(varargin)
+results = varargin{1};
+I = find(~cellfun(@isempty, results));
+for a = 2:nargin
+    results(I) = cellfun(@(c, d) cat(6, c, d), results(I), varargin{a}(I), 'UniformOutput', false);
 end
-if isempty(H)
-    H = tmult(J, J, [0 1]);
-end
-W = cost;
-for a = 1:numel(W)
-    W(a) = max(det(H(:,:,a)), 0);
-end
-W2 = 0;
 end

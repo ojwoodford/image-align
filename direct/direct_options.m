@@ -38,6 +38,7 @@ options.max_num_threads = num_cores(); % The maximum number of threads that imag
 options.iteration_func = @(varargin) false; % Default output function for the optimizer
 options.block_len = 6; % Length of square blocks used for extracting dense features
 options.no_fast_ad = false; % Flag indicating if autodiff should be accelerated if possible
+options.robust_2nd_deriv = false; % Flag indicating whether the robust kernel's second derivative should be used to compute the Hessian
 
 % Get the changed arguments
 options = vgg_argparse(options, varargin);

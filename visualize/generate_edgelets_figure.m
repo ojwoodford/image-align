@@ -40,7 +40,7 @@ hold on
 plot(col(X(:,:,1)), col(X(:,:,2)), 'g.');
 X = X([1 3 4 8 9 13 14 16 14 12 11 6 6 3 17],:,:);
 plot(col(X(:,:,1)), col(X(:,:,2)), 'g-');
-export_fig edgelets.pdf
+export_fig('edgelets.pdf');
 
 % Score image
 score_im = sc(cat(3, log1p(max(score_im, 0)), im(2:end-1,2:end-1)), 'prob');
